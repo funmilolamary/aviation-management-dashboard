@@ -232,19 +232,7 @@ with risk_col2:
         "Operational Disruptions",
         f"{cancelled + diverted:,}"
     )
-# -----------------------------
-# MANAGEMENT INSIGHTS
-# -----------------------------
 
-st.subheader("🎯 Management Insights")
-
-if delay_rate >= 30:
-    st.warning(
-        f"⚠️ The current delay rate is {delay_rate:.1f}%. "
-        "Operational teams should investigate the main sources "
-        "of delay and prioritize corrective action."
-    )
-else:
     st.success(
         f"✅ The current delay rate is {delay_rate:.1f}%, "
         "indicating relatively strong departure performance."
@@ -260,3 +248,63 @@ st.caption(
     "Data source: U.S. Bureau of Transportation Statistics (BTS) "
     "On-Time Performance data."
 )
+# -----------------------------
+# AVIATION MANAGER'S DECISION CENTER
+# -----------------------------
+
+st.subheader("🎯 Aviation Manager's Decision Center")
+
+st.markdown(
+    "Automated operational assessment based on the selected flight data."
+)
+
+# Overall operational status
+if delay_rate >= 30:
+    status = "🔴 HIGH OPERATIONAL RISK"
+    message = (
+        f"The delay rate is {delay_rate:.1f}%, indicating that "
+        "departure performance requires management attention."
+    )
+elif delay_rate >= 15:
+    status = "🟡 MODERATE OPERATIONAL RISK"
+    message = (
+        f"The delay rate is {delay_rate:.1f}%. "
+        "Operations should be monitored for recurring disruption."
+    )
+else:
+    status = "🟢 LOW OPERATIONAL RISK"
+    message = (
+        f"The delay rate is {delay_rate:.1f}%, "
+        "indicating relatively strong departure performance."
+    )
+
+st.markdown(f"### {status}")
+st.write(message)
+
+# Identify the main delay cause
+delay_causes = {
+    "Carrier": filtered_df["CARRIER_DELAY"].sum(),
+    "Air Traffic / NAS": filtered_df["NAS_DELAY"].sum(),
+    "Security": filtered_df["SECURITY_DELAY"].sum(),
+    "Late Aircraft": filtered_df["LATE_AIRCRAFT_DELAY"].sum(),
+}
+
+main_cause = max(delay_causes, key=delay_causes.get)
+
+st.warning(
+    f"⚠️ **Primary delay contributor:** {main_cause}. "
+    "Management should investigate recurring patterns in this category."
+)
+
+# Management recommendations
+st.markdown("### 💡 Recommended Management Actions")
+
+recommendations = [
+    "Monitor airlines and airports with consistently high delay rates.",
+    "Investigate the primary source of operational delays.",
+    "Review recurring high-volume routes for disruption patterns.",
+    "Track cancellations and diversions as indicators of operational instability.",
+]
+
+for recommendation in recommendations:
+    st.write(f"• {recommendation}")
