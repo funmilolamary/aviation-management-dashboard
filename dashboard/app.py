@@ -182,7 +182,56 @@ fig_delay = px.pie(
 )
 
 st.plotly_chart(fig_delay, use_container_width=True)
+# -----------------------------
+# ROUTE ANALYSIS
+# -----------------------------
 
+st.subheader("🗺️ Busiest Flight Routes")
+
+route_summary = (
+    filtered_df
+    .groupby(["ORIGIN_AIRPORT_ID", "DEST"])
+    .size()
+    .reset_index(name="Flights")
+    .sort_values("Flights", ascending=False)
+    .head(10)
+)
+
+route_summary["Route"] = (
+    route_summary["ORIGIN_AIRPORT_ID"].astype(str)
+    + " → "
+    + route_summary["DEST"]
+)
+
+fig_routes = px.bar(
+    route_summary,
+    x="Flights",
+    y="Route",
+    orientation="h",
+    title="Top 10 Flight Routes by Number of Operations",
+    labels={"Flights": "Number of Flights"}
+)
+
+st.plotly_chart(fig_routes, use_container_width=True)
+# -----------------------------
+# OPERATIONAL RISK
+# -----------------------------
+
+st.subheader("🚨 Operational Risk Indicators")
+
+risk_col1, risk_col2 = st.columns(2)
+
+with risk_col1:
+    st.metric(
+        "Flights Delayed 15+ Minutes",
+        f"{len(delayed):,}"
+    )
+
+with risk_col2:
+    st.metric(
+        "Operational Disruptions",
+        f"{cancelled + diverted:,}"
+    )
 # -----------------------------
 # MANAGEMENT INSIGHTS
 # -----------------------------
