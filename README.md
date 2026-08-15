@@ -1,5 +1,5 @@
 # ✈️ Aviation Management & Airport Operations Dashboard
-
+![Aviation Management Dashboard](Screenshot_20260815-083133.png)
 An interactive aviation analytics dashboard designed to help aviation managers understand flight operations, identify operational risks, and make data-informed management decisions.
 
 ## 🎯 Project Overview
