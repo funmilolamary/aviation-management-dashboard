@@ -233,10 +233,6 @@ with risk_col2:
         f"{cancelled + diverted:,}"
     )
 
-    st.success(
-        f"✅ The current delay rate is {delay_rate:.1f}%, "
-        "indicating relatively strong departure performance."
-    )
 
 st.info(
     "Management recommendation: monitor recurring delay causes, "
